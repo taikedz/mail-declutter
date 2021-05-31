@@ -5,6 +5,13 @@ import maildeclutter.config as CONFIG
 import maildeclutter.mailif as mailif
 
 
+HELPTEXT = """
+Mail delcutterer
+
+Access a mailbox over IMAP
+"""
+
+
 def main():
     config = CONFIG.load_config()
 
@@ -17,10 +24,27 @@ def main():
     mail = mailif.open(**mail_options)
 
     if len(sys.argv) > 2:
-        mail.fetch(bytes(sys.argv[1], encoding='utf-8'), sys.argv[2])
+        action = sys.argv[1]
+
+        if action == "view":
+            msg = mail.get_mail_message(sys.argv[2])
+            print(msg.get_body())
+
+        elif action == "trash":
+            mail.trash(sys.argv[2:])
+
+        elif action == "filter":
+            pass
+            # Here we want to do a filter that searches on subject content, or body content
+            #  through IMAP
+
+
+    elif len(sys.argv) > 1:
+        action = sys.argv[1]
+
+        if action == "unread":
+            print(mail.get_unread_message_ids())
 
     else:
-        mail.view('UNSEEN')
-
-
+        print(HELPTEXT)
 
