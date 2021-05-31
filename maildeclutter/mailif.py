@@ -41,3 +41,8 @@ class Gmail:
     def trash(self, message_ids):
         for mid in message_ids:
             result, message = self.mail_handle.store(mid, '+X-GM-LABELS', '\\Trash')
+
+
+    def close(self):
+        self.mail_handle.close()
+        self.mail_handle.logout()

@@ -11,18 +11,7 @@ Mail delcutterer
 Access a mailbox over IMAP
 """
 
-
-def main():
-    config = CONFIG.load_config()
-
-    mail_options = {
-        "imap_server": config["/server/imap"],
-        "username": config["/credentials/username"],
-        "password": config["/credentials/password"],
-        "mailbox": config.get("/server/mailbox", "INBOX"),
-    }
-    mail = mailif.open(**mail_options)
-
+def process_actions(mail):
     if len(sys.argv) > 2:
         action = sys.argv[1]
 
@@ -57,4 +46,23 @@ def main():
 
     else:
         print(HELPTEXT)
+
+
+
+def main():
+    config = CONFIG.load_config()
+
+    mail_options = {
+        "imap_server": config["/server/imap"],
+        "username": config["/credentials/username"],
+        "password": config["/credentials/password"],
+        "mailbox": config.get("/server/mailbox", "INBOX"),
+    }
+    mail = mailif.open(**mail_options)
+
+    try:
+        process_actions(mail)
+
+    finally:
+        mail.close()
 

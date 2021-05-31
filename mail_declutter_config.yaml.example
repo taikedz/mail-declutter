@@ -1,0 +1,7 @@
+credentials:
+  username: dch.tai@gmail.com
+  #password: "your-special-password"
+
+server:
+  mailbox: INBOX
+  imap: imap.gmail.com
