@@ -36,10 +36,17 @@ def main():
         elif action == "trash":
             mail.trash(sys.argv[2:])
 
+        elif action == "subject":
+            message_ids = mail.select('(SUBJECT "{}")'.format(sys.argv[2]))
+            print(str(b' '.join(message_ids), encoding='utf-8'))
+
         elif action == "filter":
             pass
             # Here we want to do a filter that searches on subject content, or body content
             #  through IMAP
+
+        else:
+            print("Unknown command")
 
 
     elif len(sys.argv) > 1:
