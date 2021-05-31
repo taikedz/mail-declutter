@@ -1,0 +1,6 @@
+*.swp
+*.pyc
+virtualenv
+
+# The real config
+mail_declutter_config.yaml
