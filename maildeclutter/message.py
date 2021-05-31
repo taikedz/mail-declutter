@@ -19,6 +19,8 @@ def parse_headers(message_lines):
 
         idx += 1
 
+    return headers
+
 
 def get_body(message_lines):
     idx = 0

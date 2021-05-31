@@ -28,7 +28,10 @@ def main():
 
         if action == "view":
             msg = mail.get_mail_message(sys.argv[2])
-            print(msg.get_body())
+            print("{}\n\n{}".format(
+                msg.headers.get("Subject"),
+                msg.get_body()
+                ))
 
         elif action == "trash":
             mail.trash(sys.argv[2:])
