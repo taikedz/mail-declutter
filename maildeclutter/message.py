@@ -22,10 +22,40 @@ def parse_headers(message_lines):
     return headers
 
 
-def get_body(message_lines):
+def get_multipart_sections(message_lines):
+    """TODO An email without sections may not have a Content-Type in the main headers
+
+    Main headers with Content-Type specify a "boundary=" key, followed by a hash which may be quoted
+
+    A boundary starts on a new line with "--" followed by the hash, unquoted, and a line end
+    A message section part ends with "--", the boundary hash, and a further "--"
+
+    Any section may have a Content-Type containing its own boundary, and so-forth
+
+    This function should return each section that is not of type "multipart/*" (these are container sections) as a Message, but without the boundary
+    mail_id should be None
+
+    1. Lookup Content-Type in headers, extract boundary
+        --> If none, return None
+    2. Continue until first boundary found
+    """
+    idx = 0
+    sections_register = {}
+
+    while idx < len(message_lines):
+        line = message_lines[idx]
+        if line.startswith("--"):
+            m = re.match("Content-Type: (.+?);", message_lines[idx+1])
+            if m:
+                pass
+
+
+def get_body(message_lines, headers):
     idx = 0
     while message_lines[idx] != '':
         idx += 1
+
+    #sections = get_multipart_sections(message_lines[idx+1:])
 
     return os.linesep.join(message_lines[idx+1:])
 
@@ -35,7 +65,7 @@ class Message:
         message_lines = re.split(r"(?:\r\n|\r|\n)", message_text)
 
         self.headers = parse_headers(message_lines)
-        self.body = get_body(message_lines)
+        self.body = get_body(message_lines, self.headers)
         self.mail_id = mail_id
 
     

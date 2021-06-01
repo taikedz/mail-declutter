@@ -2,5 +2,9 @@
 *.pyc
 virtualenv
 
+*.ignore
+ignore_*
+ignore.*
+
 # The real config
 mail_declutter_config.yaml

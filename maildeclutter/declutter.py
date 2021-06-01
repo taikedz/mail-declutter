@@ -22,17 +22,31 @@ def process_actions(mail):
                 msg.get_body()
                 ))
 
+        elif action == "headers":
+            msg = mail.get_mail_message(sys.argv[2])
+            {print(f"{k}: {v}") for k,v in msg.headers.items()}
+
+        elif action == "full":
+            msg = mail.get_mail_message(sys.argv[2])
+            {print(f"{k}: {v}") for k,v in msg.headers.items()}
+            print("")
+            print(msg.get_body())
+
         elif action == "trash":
             mail.trash(sys.argv[2:])
 
         elif action == "subject":
             message_ids = mail.select('(SUBJECT "{}")'.format(sys.argv[2]))
-            print(str(b' '.join(message_ids), encoding='utf-8'))
+            print(message_ids)
 
         elif action == "filter":
             pass
             # Here we want to do a filter that searches on subject content, or body content
             #  through IMAP
+
+        elif action == "rawquery":
+            message_ids = mail.select(sys.argv[2])
+            print(message_ids)
 
         else:
             print("Unknown command")
@@ -62,6 +76,10 @@ def main():
 
     try:
         process_actions(mail)
+
+    except BrokenPipeError:
+        # Typically when passing through things like `head`
+        pass
 
     finally:
         mail.close()
